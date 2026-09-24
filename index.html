@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Pact — Hire without the auction</title>
+  <meta name="description" content="Upwork without Connects. Short briefs, escrow, 8% from the client. Talent keeps the rate they quoted." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #070807;
+      --bg-2: #0e100e;
+      --card: #131614;
+      --line: #252a24;
+      --text: #eef3ea;
+      --muted: #8b9686;
+      --lime: #c8f542;
+      --lime-ink: #162000;
+      --cyan: #7ee0c8;
+      --gold: #e6c36a;
+      --danger: #ff5d6c;
+      --shadow: 0 22px 50px rgba(0,0,0,.48);
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: Geist, ui-sans-serif, system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.5;
+    }
+    a { color: inherit; text-decoration: none; }
+    button, input, textarea, select { font: inherit; }
+    .wrap { width: min(1120px, calc(100% - 32px)); margin: 0 auto; }
+    header {
+      position: sticky; top: 0; z-index: 20;
+      backdrop-filter: blur(16px);
+      background: rgba(7,8,7,.76);
+      border-bottom: 1px solid var(--line);
+    }
+    .nav { display: flex; align-items: center; justify-content: space-between; height: 64px; }
+    .brand { display: flex; align-items: center; gap: 10px; font-weight: 700; letter-spacing: -.03em; }
+    .logo {
+      width: 28px; height: 28px; border-radius: 8px;
+      background: linear-gradient(135deg, var(--lime), #7ee0c8);
+      color: var(--lime-ink);
+      display: grid; place-items: center;
+      font-family: "IBM Plex Mono", monospace; font-size: 15px; font-weight: 700;
+    }
+    .nav-links { display: flex; gap: 22px; color: var(--muted); font-size: 14px; }
+    .nav-links a:hover { color: var(--text); }
+    .btn {
+      border: 0; cursor: pointer; border-radius: 10px;
+      padding: 10px 14px; font-weight: 600; font-size: 14px;
+    }
+    .btn-ghost { background: transparent; color: var(--text); border: 1px solid var(--line); }
+    .btn-primary { background: var(--lime); color: var(--lime-ink); }
+    .btn-cyan { background: var(--cyan); color: #042018; }
+    .btn-wide { width: 100%; }
+    .hero { padding: 64px 0 28px; }
+    .kicker {
+      color: var(--lime);
+      font-family: "IBM Plex Mono", monospace;
+      font-size: 12px; letter-spacing: .14em; text-transform: uppercase;
+    }
+    h1 { font-size: clamp(34px, 7vw, 68px); letter-spacing: -.05em; line-height: 1.02; margin: 14px 0 18px; }
+    .sub { color: var(--muted); font-size: 18px; max-width: 640px; }
+    .cta-row { display: flex; gap: 12px; margin-top: 24px; flex-wrap: wrap; }
+    .stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin: 36px 0 8px; }
+    .stat { background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 16px; }
+    .stat b { display: block; font-size: 22px; letter-spacing: -.03em; }
+    .stat span { color: var(--muted); font-size: 12px; }
+    .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+    .grid-2 { display: grid; grid-template-columns: 1.15fr .85fr; gap: 14px; }
+    .card {
+      background: var(--card); border: 1px solid var(--line); border-radius: 16px;
+      padding: 18px; box-shadow: var(--shadow);
+    }
+    .card h3 { font-size: 16px; margin-bottom: 8px; }
+    .card p { color: var(--muted); font-size: 14px; }
+    section { padding: 48px 0; }
+    h2 { font-size: 32px; letter-spacing: -.04em; margin-bottom: 8px; }
+    .lead { color: var(--muted); margin-bottom: 22px; max-width: 720px; }
+    .compare { width: 100%; border-collapse: collapse; font-size: 14px; }
+    .compare th, .compare td { text-align: left; padding: 12px 10px; border-bottom: 1px solid var(--line); vertical-align: top; }
+    .compare th { color: var(--muted); font-weight: 500; }
+    .good { color: var(--cyan); }
+    .bad { color: var(--danger); }
+    .row { display: flex; justify-content: space-between; align-items: center; gap: 10px; }
+    form { display: grid; gap: 10px; }
+    input, textarea, select {
+      width: 100%; background: #0b0d0b; color: var(--text);
+      border: 1px solid var(--line); border-radius: 10px; padding: 11px 12px;
+    }
+    textarea { min-height: 96px; resize: vertical; }
+    label { font-size: 11px; color: var(--muted); display: block; margin-bottom: 6px; letter-spacing: .04em; text-transform: uppercase; }
+    .tabs { display: flex; gap: 8px; margin-bottom: 14px; flex-wrap: wrap; }
+    .tab {
+      border: 1px solid var(--line); background: transparent; color: var(--muted);
+      border-radius: 99px; padding: 6px 12px; cursor: pointer; font-size: 13px;
+    }
+    .tab.on { background: #1a2210; color: var(--text); border-color: #3a4a18; }
+    .price { font-family: "IBM Plex Mono", monospace; color: var(--cyan); }
+    .tag { font-size: 11px; color: var(--muted); border: 1px solid var(--line); border-radius: 99px; padding: 3px 8px; }
+    .tag.pin { color: var(--gold); border-color: #5a4a22; }
+    .tag.live { color: var(--cyan); border-color: #2a5a4a; }
+    .muted { color: var(--muted); font-size: 13px; }
+    .job { display: flex; flex-direction: column; gap: 10px; min-height: 210px; }
+    .talent { display: flex; flex-direction: column; gap: 10px; min-height: 200px; }
+    .avatar {
+      width: 36px; height: 36px; border-radius: 10px;
+      display: grid; place-items: center; font-weight: 700; font-size: 13px;
+      background: #1c2414; color: var(--lime);
+    }
+    .who { display: flex; align-items: center; gap: 10px; }
+    .toast {
+      position: fixed; bottom: 18px; right: 18px; background: #15201a;
+      border: 1px solid #2a5; color: var(--cyan); padding: 12px 14px;
+      border-radius: 12px; display: none; z-index: 40; max-width: min(380px, calc(100% - 24px));
+    }
+    footer { border-top: 1px solid var(--line); padding: 28px 0 40px; color: var(--muted); font-size: 13px; }
+    .math p + p { margin-top: 10px; }
+    @media (max-width: 900px) {
+      .nav-links { display: none; }
+      .stats, .grid, .grid-2 { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="wrap nav">
+      <a class="brand" href="#top"><span class="logo">P</span> Pact</a>
+      <nav class="nav-links">
+        <a href="#board">Board</a>
+        <a href="#roster">Roster</a>
+        <a href="#model">Why this</a>
+        <a href="#post">Post a brief</a>
+        <a href="#sell">Money</a>
+        <a href="#pricing">Pricing</a>
+      </nav>
+      <button class="btn btn-primary" onclick="document.getElementById('post').scrollIntoView()">Post a brief</button>
+    </div>
+  </header>
+
+  <main id="top">
+    <section class="hero">
+      <div class="wrap">
+        <div class="kicker">Modeled on Upwork · ~$788M marketplace fees · built simpler</div>
+        <h1>Upwork without<br>Connects.</h1>
+        <p class="sub">Upwork makes money taxing both sides, then selling the right to apply. Pact keeps the escrow and the take — and throws away the auction, the hidden 0–15% talent fee, and the pay-to-pitch tokens.</p>
+        <div class="cta-row">
+          <button class="btn btn-primary" onclick="document.getElementById('post').scrollIntoView()">Hire someone</button>
+          <button class="btn btn-ghost" onclick="document.getElementById('board').scrollIntoView()">Find a brief</button>
+        </div>
+        <div class="stats">
+          <div class="stat"><b>8%</b><span>client take on funded work</span></div>
+          <div class="stat"><b>0%</b><span>cut from the talent’s quote</span></div>
+          <div class="stat"><b>$0</b><span>to apply · 3 open pitches max</span></div>
+          <div class="stat"><b>$12/mo</b><span>Pact+ extra slots + boost</span></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="board">
+      <div class="wrap">
+        <h2>Open briefs, not a bazaar</h2>
+        <p class="lead">One paragraph. A budget. A date. No 14-field job wizard. Demo inventory lives in this browser until you wire Stripe + escrow.</p>
+        <div class="tabs" id="cats">
+          <button class="tab on" data-cat="all">All</button>
+          <button class="tab" data-cat="Build">Build</button>
+          <button class="tab" data-cat="Design">Design</button>
+          <button class="tab" data-cat="Write">Write</button>
+          <button class="tab" data-cat="Ops">Ops</button>
+        </div>
+        <div class="grid" id="jobs"></div>
+      </div>
+    </section>
+
+    <section id="roster">
+      <div class="wrap">
+        <h2>A roster, not a résumé dump</h2>
+        <p class="lead">Next-gen hiring is three people who already do this work, not 140 AI proposals. Hire from the bench. Escrow opens on tap.</p>
+        <div class="grid" id="roster-grid"></div>
+      </div>
+    </section>
+
+    <section id="model">
+      <div class="wrap">
+        <h2>The $788M site, stripped down</h2>
+        <p class="lead">Upwork’s 2025 books were about $788M of marketplace revenue on roughly $4B of work — fees on talent, fees on clients, Connects, and Plus. We copied the cash register a new site can actually run: escrow, an 8% client take, featured briefs, and a cheap talent subscription. We did not copy Connects, variable talent tax, or a proposal casino.</p>
+        <table class="compare">
+          <thead>
+            <tr><th>Piece</th><th>Upwork</th><th>Pact</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Core product</td><td>Job feed + proposals + hourly time tracker</td><td class="good">Short brief + 3-line pitch + escrow</td></tr>
+            <tr><td>How cash arrives</td><td>Talent 0–15% + client 3–10% + Connects + Plus</td><td class="good">8% from the client, pins, Pact+</td></tr>
+            <tr><td>To apply</td><td class="bad">Buy Connects, sometimes boost more</td><td class="good">Free. Cap of 3 open pitches</td></tr>
+            <tr><td>Talent take-home</td><td class="bad">Quote minus a hidden contract fee</td><td class="good">The number they typed</td></tr>
+            <tr><td>Buyer</td><td>Anyone since Elance, plus enterprise seats</td><td class="good">Founders who already know the job</td></tr>
+            <tr><td>What we refuse to build</td><td class="bad">Connects, 12-tab dashboards, fake-job farm</td><td class="good">None of that in v1</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section id="post">
+      <div class="wrap">
+        <h2>Post a brief in one screen</h2>
+        <p class="lead">If it needs a statement of work, you are not ready to hire on a marketplace. Write the job like a text.</p>
+        <div class="grid-2">
+          <div class="card">
+            <form id="brief-form">
+              <div>
+                <label>Title</label>
+                <input name="title" required placeholder="Ship a landing page for Pact" />
+              </div>
+              <div>
+                <label>Category</label>
+                <select name="cat">
+                  <option>Build</option>
+                  <option>Design</option>
+                  <option>Write</option>
+                  <option>Ops</option>
+                </select>
+              </div>
+              <div>
+                <label>Budget (USD)</label>
+                <input name="budget" type="number" min="50" step="50" required placeholder="800" />
+              </div>
+              <div>
+                <label>Due</label>
+                <input name="due" type="date" required />
+              </div>
+              <div>
+                <label>The job</label>
+                <textarea name="body" required placeholder="What done looks like. One paragraph."></textarea>
+              </div>
+              <button class="btn btn-primary" type="submit">Publish brief · 8% on fund</button>
+            </form>
+            <p class="muted" style="margin-top:12px">Demo stores the brief here. Live version opens escrow when you pick a person.</p>
+          </div>
+          <div class="card">
+            <h3>Your briefs</h3>
+            <div id="mine"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="sell">
+      <div class="wrap">
+        <h2>This is the money</h2>
+        <p class="lead">You do not need Upwork’s two-sided tax or a Connects store. You need funded jobs and a slot next to the brief. That is enough to invoice.</p>
+        <div class="grid-2">
+          <div class="card">
+            <h3>Pin a brief or a roster seat</h3>
+            <form id="pin-form">
+              <input name="who" required placeholder="Studio, agency, or your name" />
+              <select name="kind">
+                <option value="39">Brief pin · 7 days · $39</option>
+                <option value="99">Brief pin · 30 days · $99</option>
+                <option value="49">Roster seat · $49/mo</option>
+              </select>
+              <input name="niche" required placeholder="Niche — e.g. Atlanta Shopify builds" />
+              <textarea name="note" placeholder="What should the unit say?"></textarea>
+              <button class="btn btn-cyan" type="submit">Hold the unit</button>
+            </form>
+          </div>
+          <div class="card math">
+            <h3>Year-one math that does not require Connects</h3>
+            <p>80 funded jobs / month × $900 average × 8% = $69,120 / year.</p>
+            <p>30 brief pins / month × $39 = $14,040 / year. Ten 30-day pins × $99 × 12 = $11,880.</p>
+            <p>40 roster seats × $49 × 12 = $23,520.</p>
+            <p>600 Pact+ members × $12 = $7,200 / mo once the board is busy.</p>
+            <p>Take first. Pins second. Plus third. Time-trackers never.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="pricing">
+      <div class="wrap">
+        <h2>Pricing</h2>
+        <div class="grid">
+          <div class="card">
+            <h3>Free</h3>
+            <p>Post briefs. Three open pitches. Escrow. Talent keeps 100% of the quote. Client pays 8% when funds land.</p>
+          </div>
+          <div class="card">
+            <h3>Pact+ · $12/mo</h3>
+            <p>Ten open pitches, a lime badge, and one roster bump a week. Still $0 Connects.</p>
+          </div>
+          <div class="card">
+            <h3>Studio · $29/mo</h3>
+            <p>Three seats, one payout inbox, shared briefs. For a shop that does not want an “enterprise” call.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="wrap">
+      Pact is a simpler model of Upwork (~$788M marketplace revenue on freelance commissions). Not affiliated with Upwork. Demo only — wire Stripe escrow, identity checks, and a domain to go live.
+    </div>
+  </footer>
+  <div class="toast" id="toast">Saved.</div>
+
+  <script>
+    const toast = (msg) => {
+      const t = document.getElementById("toast");
+      t.textContent = msg;
+      t.style.display = "block";
+      setTimeout(() => t.style.display = "none", 2400);
+    };
+
+    const seedJobs = [
+      { title: "Ship a waitlist page this week", cat: "Build", budget: 700, due: "7 days", body: "One HTML page, referral codes, mobile first. Atlanta founder. No Figma archaeology.", pin: true },
+      { title: "Rewrite a pricing page that converts", cat: "Write", budget: 450, due: "5 days", body: "SaaS, three tiers, objection handling. Keep it short. No AI sludge.", pin: false },
+      { title: "Brand mark + 4 social covers", cat: "Design", budget: 900, due:  "10 days", body: "Dark UI, lime accent, wordmark that works at 28px. SVG + png.", pin: false },
+      { title: "Clean a Shopify catalog, 80 SKUs", cat: "Ops", budget: 600, due: "12 days", body: "Titles, tags, alt text, 3 collection pages. Store already live.", pin: false },
+      { title: "Python script: weekly Stripe → Sheets", cat: "Build", budget: 350, due: "4 days", body: "Pull payouts, tip out contractors, email a CSV. Document the cron.", pin: false },
+      { title: "Launch video, 28 seconds, no voiceover", cat: "Design", budget: 1200, due: "14 days", body: "Product UI only. Caption-ready. You keep the project files.", pin: true }
+    ];
+
+    const roster = [
+      { name: "Maya Chen", role: "Product engineer", rate: 95, blurb: "Ships marketing sites and thin apps. No Jira novels.", tag: "Build" },
+      { name: "Andre Cole", role: "Brand + motion", rate: 110, blurb: "Marks, covers, 20-second product loops.", tag: "Design" },
+      { name: "Priya Shah", role: "Conversion copy", rate: 85, blurb: "Pricing pages, onboarding, emails that get sent.", tag: "Write" },
+      { name: "Luis Ortega", role: "Ops + stores", rate: 70, blurb: "Shopify, inventory, the unglamorous work that prints.", tag: "Ops" },
+      { name: "Noor Hale", role: "Full-stack, weekend pace", rate: 120, blurb: "APIs, auth, webhooks. Quotes in hours not sprints.", tag: "Build" },
+      { name: "Eden Park", role: "Research + briefs", rate: 65, blurb: "Turns a messy founder note into a one-pager the builder can use.", tag: "Write" }
+    ];
+
+    const initials = (n) => n.split(" ").map(p => p[0]).join("");
+
+    let cat = "all";
+    const jobBox = document.getElementById("jobs");
+    function allJobs() {
+      const extra = JSON.parse(localStorage.getItem("pact-briefs") || "[]");
+      return [...extra, ...seedJobs];
+    }
+    function renderJobs() {
+      const list = allJobs().filter(j => cat === "all" || j.cat === cat);
+      jobBox.innerHTML = list.map(j => `
+        <article class="card job">
+          <div class="row">
+            <span class="tag ${j.pin ? "pin" : ""}">${j.pin ? "Pinned · " : ""}${j.cat}</span>
+            <span class="price">$${j.budget}</span>
+          </div>
+          <h3>${j.title}</h3>
+          <p>${j.body}</p>
+          <div class="row">
+            <span class="muted">Due ${j.due}</span>
+            <button class="btn btn-ghost" onclick="apply('${String(j.title).replace(/'/g, "")}', ${j.budget})">Pitch · free</button>
+          </div>
+        </article>
+      `).join("") || `<p class="muted">No briefs in this lane yet.</p>`;
+    }
+    renderJobs();
+
+    document.getElementById("cats").addEventListener("click", (e) => {
+      const b = e.target.closest(".tab");
+      if (!b) return;
+      cat = b.dataset.cat;
+      document.querySelectorAll("#cats .tab").forEach(t => t.classList.toggle("on", t === b));
+      renderJobs();
+    });
+
+    window.apply = (title, budget) => {
+      const open = JSON.parse(localStorage.getItem("pact-pitches") || "[]");
+      if (open.length >= 3) {
+        toast("Three open pitches already. Close one, or Pact+ lifts the cap.");
+        return;
+      }
+      open.unshift({ title, budget, at: Date.now() });
+      localStorage.setItem("pact-pitches", JSON.stringify(open.slice(0, 3)));
+      toast("Pitch queued on \u201c" + title + "\u201d. $0 Connects. Client pays 8% if they fund.");
+    };
+
+    document.getElementById("roster-grid").innerHTML = roster.map(p => `
+      <article class="card talent">
+        <div class="row">
+          <div class="who">
+            <div class="avatar">${initials(p.name)}</div>
+            <div>
+              <h3 style="margin:0">${p.name}</h3>
+              <span class="muted">${p.role}</span>
+            </div>
+          </div>
+          <span class="tag">${p.tag}</span>
+        </div>
+        <p>${p.blurb}</p>
+        <div class="row">
+          <span class="price">$${p.rate}/hr</span>
+          <button class="btn btn-primary" onclick="hire('${p.name}', ${p.rate})">Open escrow</button>
+        </div>
+      </article>
+    `).join("");
+
+    window.hire = (name, rate) => {
+      toast("Escrow hook ready — " + name + " at $" + rate + "/hr. Client funds +" + Math.round(rate * 0.08) + "/hr take.");
+    };
+
+    const due = document.querySelector('input[name="due"]');
+    const d = new Date();
+    d.setDate(d.getDate() + 10);
+    due.value = d.toISOString().slice(0, 10);
+
+    function renderMine() {
+      const mine = JSON.parse(localStorage.getItem("pact-briefs") || "[]");
+      const el = document.getElementById("mine");
+      if (!mine.length) {
+        el.innerHTML = `<p class="muted">Nothing posted yet. Publish on the left.</p>`;
+        return;
+      }
+      el.innerHTML = mine.map(j => `
+        <div style="padding:10px 0;border-bottom:1px solid var(--line)">
+          <div class="row"><b>${j.title}</b><span class="price">$${j.budget}</span></div>
+          <span class="muted">${j.cat} · due ${j.due}</span>
+        </div>
+      `).join("");
+    }
+    renderMine();
+
+    document.getElementById("brief-form").addEventListener("submit", (e) => {
+      e.preventDefault();
+      const f = new FormData(e.target);
+      const brief = {
+        title: f.get("title"),
+        cat: f.get("cat"),
+        budget: Number(f.get("budget")),
+        due: f.get("due"),
+        body: f.get("body"),
+        pin: false
+      };
+      const next = [brief, ...JSON.parse(localStorage.getItem("pact-briefs") || "[]")];
+      localStorage.setItem("pact-briefs", JSON.stringify(next));
+      e.target.reset();
+      due.value = d.toISOString().slice(0, 10);
+      renderMine();
+      renderJobs();
+      toast("Brief live. 8% lands when you fund someone.");
+    });
+
+    document.getElementById("pin-form").addEventListener("submit", (e) => {
+      e.preventDefault();
+      const f = new FormData(e.target);
+      toast("Unit held for " + f.get("who") + " · $" + f.get("kind") + ". Stripe hook next.");
+      e.target.reset();
+    });
+  </script>
+</body>
+</html>
